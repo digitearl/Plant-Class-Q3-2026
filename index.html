@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: oklch(0.97 0.018 85); font-family: 'Nunito', sans-serif; color: oklch(0.28 0.02 80); }
+  a { color: oklch(0.60 0.15 25); text-decoration: none; }
+  a:hover { color: oklch(0.52 0.15 25); }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn { from { opacity: 0; transform: translateY(18px) scale(0.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+</style>
+</helmet>
+<div style="max-width: 1120px; margin: 0 auto; padding: 40px 24px 72px;">
+
+  <div style="position: relative; background: oklch(0.99 0.012 85); border: 3px solid oklch(0.90 0.03 85); border-radius: 34px; padding: 44px 48px; box-shadow: 0 18px 40px -24px oklch(0.5 0.05 80 / 0.4); overflow: hidden;">
+    <div style="display: flex; gap: 12px; font-size: 30px; position: absolute; top: 22px; right: 30px; opacity: 0.9;">
+      <span style="display: inline-block; animation: floaty 4s ease-in-out infinite;">🌱</span>
+      <span style="display: inline-block; animation: floaty 4s ease-in-out infinite 0.6s;">🌸</span>
+      <span style="display: inline-block; animation: floaty 4s ease-in-out infinite 1.2s;">🌿</span>
+    </div>
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: oklch(0.94 0.05 145); color: oklch(0.42 0.12 145); font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.5px; padding: 7px 16px; border-radius: 999px; text-transform: uppercase;">🪴 Plant Class</div>
+    <h1 style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 52px; line-height: 1.05; margin: 18px 0 10px; color: oklch(0.30 0.03 80); max-width: 720px; text-wrap: balance;">What we're growing this term</h1>
+    <p style="font-size: 20px; line-height: 1.5; margin: 0; max-width: 640px; font-weight: 600; color: oklch(0.42 0.02 80);">A friendly look at the skills our <strong style="color: oklch(0.42 0.12 145);">Grade R</strong> class is working on in <strong>Term&nbsp;3, 2026</strong> — across language, numbers and everyday life. <strong style="color: oklch(0.5 0.13 245);">Tap any skill</strong> to learn more.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px;">
+      <sc-for list="{{ stats }}" as="stat" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; background: {{ stat.tint }}; border-radius: 18px; padding: 14px 20px;">
+          <span style="font-size: 30px;">{{ stat.icon }}</span>
+          <span><span style="display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 26px; line-height: 1; color: {{ stat.color }};">{{ stat.num }}</span><span style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: oklch(0.5 0.02 80);">{{ stat.label }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-for list="{{ areas }}" as="area" hint-placeholder-count="3">
+    <section style="margin-top: 48px;">
+      <div style="display: flex; align-items: center; gap: 16px; background: {{ area.color }}; border-radius: 24px; padding: 18px 26px; box-shadow: 0 14px 30px -20px {{ area.color }};">
+        <span style="font-size: 40px; background: oklch(1 0 0 / 0.22); width: 62px; height: 62px; border-radius: 18px; display: flex; align-items: center; justify-content: center;">{{ area.emoji }}</span>
+        <div>
+          <h2 style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 30px; margin: 0; color: oklch(1 0 0);">{{ area.name }}</h2>
+          <p style="margin: 2px 0 0; font-weight: 700; font-size: 15px; color: oklch(1 0 0 / 0.85);">{{ area.tagline }}</p>
+        </div>
+      </div>
+
+      <sc-for list="{{ area.groups }}" as="group" hint-placeholder-count="3">
+        <div style="background: oklch(0.99 0.012 85); border: 2px solid oklch(0.91 0.03 85); border-radius: 24px; padding: 22px 24px; margin-top: 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: {{ area.color }};"></span>
+            <h3 style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; margin: 0; color: oklch(0.32 0.03 80);">{{ group.name }}</h3>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px;">
+            <sc-for list="{{ group.skills }}" as="skill" hint-placeholder-count="6">
+              <button type="button" onClick="{{ skill.onOpen }}" style="display: flex; align-items: center; gap: 13px; background: {{ area.tint }}; border: 2px solid transparent; border-radius: 16px; padding: 12px 14px; text-align: left; cursor: pointer; font-family: inherit; width: 100%; transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;" style-hover="transform: translateY(-3px); border-color: {{ area.color }}; box-shadow: 0 10px 20px -12px {{ area.color }};">
+                <span style="flex: none; width: 46px; height: 46px; border-radius: 50%; background: oklch(1 0 0); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px -6px oklch(0.4 0.05 80 / 0.5);">{{ skill.icon }}</span>
+                <span style="flex: 1; font-weight: 700; font-size: 15px; line-height: 1.3; color: oklch(0.3 0.02 80); text-wrap: pretty;">{{ skill.t }}</span>
+                <span style="flex: none; color: {{ area.color }}; font-size: 18px; font-weight: 800;">›</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+  </sc-for>
+
+  <p style="text-align: center; margin-top: 50px; font-weight: 700; font-size: 15px; color: oklch(0.55 0.02 80);">🌟 Every little skill is a step as our Plant Class keeps growing • Term 3 · 2026 🌟</p>
+</div>
+
+<sc-if value="{{ sel }}">
+  <div onClick="{{ closeModal }}" style="position: fixed; inset: 0; z-index: 100; background: oklch(0.25 0.03 80 / 0.55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: overlayIn 0.2s ease both;">
+    <div onClick="{{ stop }}" style="position: relative; width: 100%; max-width: 470px; max-height: calc(100vh - 48px); overflow-y: auto; background: oklch(0.99 0.012 85); border-radius: 30px; box-shadow: 0 30px 70px -30px oklch(0.2 0.05 80 / 0.7); animation: popIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both;">
+      <button type="button" onClick="{{ closeModal }}" aria-label="Close" style="position: absolute; top: 16px; right: 16px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: none; background: oklch(0.2 0.03 80 / 0.4); color: oklch(1 0 0); font-size: 20px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+      <div style="background: {{ sel.color }}; padding: 24px 24px 20px;">
+        <div style="display: inline-block; margin-top: 18px; background: oklch(1 0 0 / 0.24); color: oklch(1 0 0); font-weight: 800; font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase; padding: 5px 14px; border-radius: 999px;">{{ sel.crumb }}</div>
+      </div>
+      <div style="padding: 24px 30px 32px;">
+        <h3 style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 25px; line-height: 1.15; margin: 0 0 12px; color: oklch(0.3 0.03 80); text-wrap: balance;">{{ sel.t }}</h3>
+        <p style="margin: 0; font-size: 16.5px; line-height: 1.6; font-weight: 600; color: oklch(0.4 0.02 80); text-wrap: pretty;">{{ sel.d }}</p>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sel: null };
+  renderVals() {
+    const areas = [
+      {
+        name: "Home Language", emoji: "🗣️", tagline: "Listening, reading & writing",
+        color: "oklch(0.63 0.15 30)", tint: "oklch(0.95 0.035 40)",
+        groups: [
+          { name: "Listening & Speaking", skills: [
+            { icon: "👂", t: "Listen attentively to questions and give answers", d: "Listen closely to a question and respond with a relevant answer. Building this attentive listening helps children process what they hear and reply thoughtfully — the foundation of comprehension and classroom confidence." },
+            { icon: "🙊", t: "Listen without interrupting and take turns to speak", d: "Wait for others to finish before speaking, and take turns in conversation. This grows patience and respect, so group discussions stay calm and every child gets a chance to be heard." },
+            { icon: "✋", t: "Listen to and execute 5 instructions", d: "Hold and carry out a sequence of up to five spoken instructions in the right order. Strengthening working memory this way prepares children to manage multi-step tasks on their own." },
+            { icon: "🎵", t: "Sing songs, say rhymes and perform actions", d: "Join in with songs and rhymes while performing the matching actions. This builds vocabulary, rhythm and memory, and makes early language learning joyful and social." },
+            { icon: "📖", t: "Retell a story in own words", d: "Retell a story in their own words, keeping the events in order. This deepens comprehension and sequencing and lays the groundwork for storytelling and later writing." },
+            { icon: "⚖️", t: "Use language to compare things that are different", d: "Describe how things differ — bigger, faster, softer. Comparing sharpens observation and expands the descriptive vocabulary children need to explain their thinking." },
+            { icon: "🔗", t: "Match things that go together (e.g. pen & paper)", d: "Verbally pair items that belong together, like pen & paper. This builds logical thinking and the ability to explain why things connect." },
+            { icon: "🖼️", t: "Talk about pictures (own and in a book)", d: "Describe what is happening in pictures, both their own drawings and those in books. This encourages expressive language and the habit of finding meaning in images — a key pre-reading skill." },
+            { icon: "💬", t: "Speak fluently", d: "Speak in smooth, connected sentences rather than single hesitant words. Fluency lets children share their ideas clearly and be understood with confidence." },
+            { icon: "🔤", t: "Pronounce words correctly and clearly", d: "Say words clearly and correctly. Clear pronunciation helps children be understood and builds a strong foundation for reading and spelling." },
+          ]},
+          { name: "Emergent Reading", skills: [
+            { icon: "🏞️", t: "Use pictures to \u201Cread\u201D captions", d: "Use the picture clues on a page to work out and \u201Cread\u201D the caption. This shows children that print carries meaning — a vital first step toward real reading." },
+            { icon: "🏷️", t: "Match flashcards / labels to objects on theme table", d: "Match word cards and labels to objects on the theme table. Connecting written words to real things builds early word recognition and print awareness." },
+            { icon: "🎨", t: "Interpret pictures to create own story", d: "Look at a set of pictures and invent their own story. This nurtures imagination, sequencing and expressive language all at once." },
+            { icon: "📚", t: "Read stories that were \u201Cwritten\u201D by the class", d: "\u201CRead\u201D back the stories the class created together. Revisiting familiar text builds confidence, print awareness and a love of books." },
+            { icon: "🛒", t: "Read high-frequency words, e.g. Spur, Pick 'n Pay", d: "Recognise familiar everyday words and logos such as Spur or Pick 'n Pay. Spotting print out in the world motivates children and kick-starts sight-reading." },
+            { icon: "🔉", t: "Recognize beginning- and end sounds by ear", d: "Hear and identify the first and last sounds in spoken words. This phonological awareness is essential groundwork for learning to read and spell." },
+            { icon: "🔡", t: "Recognize and name some letters (sounds) of the alphabet", d: "Recognise and name some alphabet letters and the sounds they make. Linking letters to sounds is the key that unlocks decoding — the heart of reading." },
+            { icon: "🧩", t: "Complete 48 puzzles in a timely manner", d: "Complete a set of 48 puzzles in good time. Puzzles build focus, perseverance and visual problem-solving that transfer across the curriculum." },
+          ]},
+          { name: "Emergent Writing", skills: [
+            { icon: "✏️", t: "Draw a picture to convey a message, add words with help", d: "Draw a picture to share an idea and, with help, add words or phrases. This connects drawing to writing and shows children their ideas can be recorded on paper." },
+            { icon: "🔠", t: "Copy letters, numbers and shapes", d: "Copy letters, numbers and shapes. Careful copying trains fine-motor control and correct letter formation, preparing children for handwriting." },
+            { icon: "📝", t: "Write / copy a few words with help", d: "Write or copy a few simple words with guidance. Early success writing words builds confidence and a positive attitude toward writing." },
+            { icon: "↘️", t: "Write from top to bottom and left to right", d: "Write starting at the top and moving left to right. Learning this directionality is fundamental for both reading and writing." },
+            { icon: "✍️", t: "Hold pencil firmly with good control (pencil grip)", d: "Hold a pencil firmly and correctly, guiding it with control. A secure grip reduces fatigue and produces neater, more confident work." },
+            { icon: "✂️", t: "Cut securely on a line", d: "Cut accurately and safely along a line. Scissor skills develop the hand strength and precision that writing also relies on." },
+          ]},
+        ],
+      },
+      {
+        name: "Mathematics", emoji: "🔢", tagline: "Numbers, shapes & patterns",
+        color: "oklch(0.60 0.13 245)", tint: "oklch(0.95 0.03 245)",
+        groups: [
+          { name: "Numbers, Operations & Relationships", skills: [
+            { icon: "🔢", t: "Rote counting to 40+", d: "Count aloud in the correct order to 40 and beyond. A secure counting sequence is the backbone of all later number work." },
+            { icon: "⏪", t: "Count backwards: 7 → 0", d: "Count down from 7 to 0. Counting backwards builds flexible number sense and prepares children for subtraction." },
+            { icon: "👀", t: "Estimate objects up to 7, then count to check", d: "Estimate a quantity up to 7, then count to check how close it was. Estimating develops reasoning and a feel for 'about how many'." },
+            { icon: "🧮", t: "Compare collections: more / less / many / few / equal", d: "Compare groups of objects using more, less, many, few and equal. Comparing quantities is the basis for understanding number relationships." },
+            { icon: "🎲", t: "Recognize dot cards 1–7 without counting", d: "Recognise dice-like dot patterns from 1 to 7 at a glance, without counting each dot. This 'subitising' speeds up mental maths and number fluency." },
+            { icon: "#️⃣", t: "Recognise number symbols 1–10", d: "Recognise the written number symbols from 1 to 10. Knowing numerals lets children read and record numbers accurately." },
+            { icon: "💬", t: "Recognise number names one to seven", d: "Read and recognise the number words from one to seven. Linking words, symbols and quantities gives children a complete understanding of number." },
+            { icon: "🥇", t: "Understand ordinal numbers (1st–7th, last)", d: "Understand order — first, second, third, up to seventh and last. Ordinal language helps children describe sequence and position clearly." },
+            { icon: "➕", t: "Solve + and − sums to 10 with counters & explain", d: "Solve addition and subtraction to 10 with counters and explain their thinking aloud. Hands-on problem solving builds true understanding, not just answers." },
+            { icon: "💵", t: "Identify SA banknotes", d: "Identify South African banknotes. Recognising money connects maths to everyday life and starts children's financial awareness." },
+          ]},
+          { name: "Patterns & Functions", skills: [
+            { icon: "🔁", t: "Copy & complete a repeating pattern (4 colours / objects)", d: "Copy and continue a repeating pattern of up to 4 colours or objects. Pattern work builds logical thinking and prediction — the roots of early algebra." },
+            { icon: "🌈", t: "Create own patterns", d: "Invent their own repeating patterns. Creating patterns blends creativity with structured mathematical thinking." },
+          ]},
+          { name: "Spatial Orientation & Shapes", skills: [
+            { icon: "🔷", t: "Identify and name 2D and 3D shapes", d: "Identify and name flat (2D) and solid (3D) shapes. Shape knowledge is the foundation of geometry and of describing the world around them." },
+            { icon: "🔶", t: "Understand constancy of shape", d: "Understand that a shape stays the same even when turned or moved. This develops visual reasoning and flexible thinking." },
+            { icon: "🧱", t: "Build from a given design (2D designs & 3D models)", d: "Build a picture or model from a given 2D design or 3D example. Following a plan grows spatial reasoning and careful attention to detail." },
+            { icon: "🧭", t: "Describe position of one object relative to another", d: "Describe where one object is in relation to another — up, down, next to, behind. Positional language supports following directions and understanding geometry." },
+            { icon: "📌", t: "Execute instructions on a pegboard", d: "Follow instructions to place pegs correctly on a pegboard. This links listening, fine-motor skill and spatial accuracy in one activity." },
+            { icon: "➡️", t: "Know directions of arrows on a chart", d: "Read and follow the direction that arrows point on a chart. Understanding directional symbols supports maps, reading and problem solving." },
+          ]},
+          { name: "Measurement", skills: [
+            { icon: "📏", t: "Compare length: estimate and measure", d: "Estimate and measure to compare how long or short things are. Measuring builds practical maths and comparison skills for real-life situations." },
+            { icon: "⚖️", t: "Compare mass: lighter / heavier / lightest / heaviest", d: "Compare weight using lighter, heavier, lightest and heaviest. Exploring mass develops vocabulary and hands-on reasoning." },
+            { icon: "🥤", t: "Compare volume: empty / full / more / less", d: "Compare how much containers hold — empty, full, more than, less than. Volume play builds an early understanding of capacity." },
+          ]},
+          { name: "Data Handling", skills: [
+            { icon: "📊", t: "Collect, sort, draw, read and represent data", d: "Collect objects, sort them, and draw or represent the information. This introduces children to organising data and reading simple graphs." },
+            { icon: "🔍", t: "Analyse data according to attributes", d: "Describe sorted data by its attributes, such as colour, size or shape. Analysing information builds reasoning and the ability to draw simple conclusions." },
+          ]},
+        ],
+      },
+      {
+        name: "Life Skills", emoji: "🌟", tagline: "Growing as a whole person",
+        color: "oklch(0.58 0.13 150)", tint: "oklch(0.95 0.035 150)",
+        groups: [
+          { name: "Beginning Knowledge & Personal / Social Well-being", skills: [
+            { icon: "🏠", t: "Know personal info: birthday, address, parent's phone number", d: "Know their birthday, home address and a parent's phone number. This personal knowledge helps keep children safe and builds a sense of identity and confidence." },
+            { icon: "🎯", t: "Concentrate (age appropriate) in a group and alone", d: "Concentrate for an age-appropriate time, both in a group and working alone. Sustained focus is essential for learning across every subject." },
+            { icon: "🌦️", t: "Adapt to weather conditions, e.g. clothes", d: "Understand how to dress and adapt to different weather. This grows independence and everyday awareness of their environment." },
+            { icon: "💧", t: "Show awareness and respect for the value of water", d: "Show awareness and respect for how precious water is. Caring for resources fosters responsibility and early environmental awareness." },
+            { icon: "🥕", t: "Categorise fruit, vegetables and dairy", d: "Sort foods into fruit, vegetable and dairy groups. This supports healthy-eating awareness while practising classification skills." },
+            { icon: "🤝", t: "Show respect for peers and adults at school", d: "Treat classmates and the adults at school with respect. Respect creates a safe, kind classroom where everyone can learn well." },
+            { icon: "🔄", t: "Can take turns", d: "Wait and take turns during activities and games. Turn-taking builds patience, fairness and social harmony." },
+            { icon: "🧹", t: "Help keep the school clean and tidy", d: "Take responsibility for keeping the classroom and school tidy. Caring for shared spaces builds pride and a sense of community." },
+            { icon: "🛴", t: "Obey rules during play times", d: "Follow the rules during play, such as sharing scooters and toys. Rules keep play safe, fair and fun for everyone." },
+            { icon: "🎒", t: "Take care of own clothes and belongings", d: "Look after their own clothes and belongings. Taking responsibility for their things builds independence and organisation." },
+            { icon: "🧠", t: "Focus on the task at hand", d: "Give full attention to the task in front of them. Staying on task helps children finish their work and feel proud of it." },
+            { icon: "⏳", t: "Complete tasks with sustained attention", d: "See a task through to the end without losing focus. Persistence builds resilience and a real sense of achievement." },
+            { icon: "✏️", t: "Correct pencil grip", d: "Hold a pencil correctly. A good grip makes writing and drawing easier, neater and more comfortable." },
+          ]},
+          { name: "Creative Arts", skills: [
+            { icon: "🖌️", t: "Create pictures based on the theme of the week", d: "Create artwork inspired by the weekly theme. Art develops imagination, self-expression and fine-motor control." },
+            { icon: "📦", t: "Make 3D art from boxes, toilet rolls & more", d: "Turn boxes, toilet rolls and other materials into 3D creations. Building in three dimensions grows creativity and problem solving." },
+          ]},
+          { name: "Performing Arts", skills: [
+            { icon: "🎤", t: "Participate in singing and rhymes", d: "Join in enthusiastically with class singing and rhymes. Music builds memory, language, rhythm and a warm sense of belonging." },
+            { icon: "💃", t: "Express themselves in dance and drama", d: "Express themselves through movement, dance and pretend play. Performing builds confidence, creativity and body awareness." },
+          ]},
+          { name: "Physical Education", skills: [
+            { icon: "🤸", t: "Hop, skip and gallop rhythmically", d: "Hop, skip and gallop in a steady rhythm. These movements develop coordination, balance and gross-motor strength." },
+            { icon: "🌉", t: "Walk comfortably over a beam or thick rope", d: "Walk confidently across a balancing beam or a thick rope. Balancing builds core strength, focus and body control." },
+            { icon: "🦩", t: "Balance on one leg", d: "Balance steadily while standing on one leg. Static balance strengthens stability and concentration." },
+            { icon: "🪢", t: "Skip over a swinging rope", d: "Jump over a swinging rope with good timing. This develops timing, coordination and rhythm." },
+            { icon: "🤾", t: "Throw and catch bean bags or balls", d: "Throw and catch bean bags or balls. Hand-eye coordination supports sport as well as fine-motor control." },
+            { icon: "🏀", t: "Bounce big balls", d: "Bounce large balls with control. Ball skills build coordination and confidence in movement." },
+            { icon: "🦶", t: "Hopscotch", d: "Play hopscotch, hopping through the numbered squares. This blends counting, balance and joyful physical activity." },
+            { icon: "🧗", t: "Crawl, climb and weave through an obstacle course", d: "Crawl, climb and weave through an obstacle course. Navigating obstacles builds strength, agility and the ability to plan movements." },
+          ]},
+        ],
+      },
+    ];
+
+    const custom = {
+      "slot-2-2-0": "uploads/Firefly_Gemini Flash_enthusiastic singing and rhymes. Music builds memory, language, rhythm and a warm sen 199251.png",
+      "slot-0-2-4": "uploads/Firefly Gemini Pencil Grip.png",
+      "slot-2-3-1": "uploads/Firefly Gemini Flash Balancing Child.png"
+    };
+    areas.forEach((area, ai) => {
+      area.groups.forEach((group, gi) => {
+        group.skills.forEach((skill, si) => {
+          skill.slotId = "slot-" + ai + "-" + gi + "-" + si;
+          skill.placeholder = "Illustration: a classmate — " + skill.t;
+          skill.img = custom[skill.slotId] || ("illustrations/" + skill.slotId + ".svg");
+          skill.onOpen = () => this.setState({ sel: { ...skill, color: area.color, tint: area.tint, crumb: area.name + " · " + group.name } });
+        });
+      });
+    });
+
+    const totalGroups = areas.reduce((n, a) => n + a.groups.length, 0);
+    const totalSkills = areas.reduce((n, a) => n + a.groups.reduce((m, g) => m + g.skills.length, 0), 0);
+    const stats = [
+      { icon: "📚", num: areas.length, label: "Learning areas", color: "oklch(0.5 0.13 30)", tint: "oklch(0.95 0.035 40)" },
+      { icon: "🗂️", num: totalGroups, label: "Focus groups", color: "oklch(0.48 0.13 245)", tint: "oklch(0.95 0.03 245)" },
+      { icon: "🌱", num: totalSkills, label: "Little milestones", color: "oklch(0.46 0.13 150)", tint: "oklch(0.95 0.035 150)" },
+    ];
+
+    return {
+      areas, stats,
+      sel: this.state.sel,
+      closeModal: () => this.setState({ sel: null }),
+      stop: (e) => e.stopPropagation(),
+    };
+  }
+}
+</script>
+</body>
+</html>
