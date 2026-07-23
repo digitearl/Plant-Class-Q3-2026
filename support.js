@@ -26,6 +26,7 @@
     }
 
     const comp = new Component(root);
+    comp._templateChildren = Array.from(root.childNodes).filter(n => !(n.nodeType===1 && n.tagName.toLowerCase() === 'script' && n.getAttribute('type') === 'text/x-dc'));
 
     comp._render = function(){
       const ctx = comp.renderVals();
@@ -129,13 +130,55 @@
       }
 
       // process and render content (excluding the <script type="text/x-dc"> itself)
-      const templateChildren = Array.from(root.childNodes).filter(n => !(n.nodeType===1 && n.tagName.toLowerCase() === 'script' && n.getAttribute('type') === 'text/x-dc'));
+      const templateChildren = comp._templateChildren || [];
       const container = document.createDocumentFragment();
       templateChildren.forEach(n => container.appendChild(processNode(n, ctx)));
 
       // replace root content
       root.innerHTML = '';
       root.appendChild(container);
+
+      if(comp.state.sel){
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position: fixed; inset: 0; z-index: 100; background: oklch(0.25 0.03 80 / 0.55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: overlayIn 0.2s ease both;';
+        overlay.onclick = ctx.closeModal;
+
+        const card = document.createElement('div');
+        card.style.cssText = 'position: relative; width: 100%; max-width: 470px; max-height: calc(100vh - 48px); overflow-y: auto; background: oklch(0.99 0.012 85); border-radius: 30px; box-shadow: 0 30px 70px -30px oklch(0.2 0.05 80 / 0.7); animation: popIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both;';
+        card.onclick = ctx.stop;
+
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.setAttribute('aria-label', 'Close');
+        closeBtn.style.cssText = 'position: absolute; top: 16px; right: 16px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: none; background: oklch(0.2 0.03 80 / 0.4); color: oklch(1 0 0); font-size: 20px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;';
+        closeBtn.onclick = ctx.closeModal;
+        closeBtn.textContent = '×';
+        card.appendChild(closeBtn);
+
+        const header = document.createElement('div');
+        header.style.cssText = 'background: ' + (comp.state.sel.color || 'oklch(0.63 0.15 30)') + '; padding: 24px 24px 20px;';
+        const crumb = document.createElement('div');
+        crumb.style.cssText = 'display: inline-block; margin-top: 18px; background: oklch(1 0 0 / 0.24); color: oklch(1 0 0); font-weight: 800; font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase; padding: 5px 14px; border-radius: 999px;';
+        crumb.textContent = comp.state.sel.crumb || 'Skill';
+        header.appendChild(crumb);
+        card.appendChild(header);
+
+        const body = document.createElement('div');
+        body.style.cssText = 'padding: 24px 30px 32px;';
+        const title = document.createElement('h3');
+        title.style.cssText = 'font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 25px; line-height: 1.15; margin: 0 0 12px; color: oklch(0.3 0.03 80); text-wrap: balance;';
+        title.textContent = comp.state.sel.t || '';
+
+        const desc = document.createElement('p');
+        desc.style.cssText = 'margin: 0; font-size: 16.5px; line-height: 1.6; font-weight: 600; color: oklch(0.4 0.02 80); text-wrap: pretty;';
+        desc.textContent = comp.state.sel.d || '';
+
+        body.appendChild(title);
+        body.appendChild(desc);
+        card.appendChild(body);
+        overlay.appendChild(card);
+        root.appendChild(overlay);
+      }
     };
 
     comp._render();
